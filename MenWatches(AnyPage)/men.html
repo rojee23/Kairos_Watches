@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairos Watches - Men's Collection</title>
+    <link rel="stylesheet" href="men.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="site-logo">Kairos Watches</div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="../HomePage/home.html">Home</a></li>
+
+                <li>
+                    <a href="#">Products ▾</a>
+                    <div class="dropdown-menu">
+                        <a id="men" href="men.html">Men Watches</a>
+                        <a id="women" href="../WomanWatches(ProductPage)/women.php">Women Watches</a>
+                    </div>
+                </li>
+
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="../LogOut/">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Product Gallery Section -->
+    <section class="products-gallery" id="products-gallery">
+        <h1>Men's Collection</h1>
+        <p class="subtitle">Explore our exclusive timepieces for men—where style meets functionality, crafted for the
+            modern man.</p>
+
+        <div class="products-grid">
+            <!-- Product Card 1 -->
+            <div class="product-card">
+                <img src="TitanChrono.webp" alt="Titan Chronograph Watch">
+                <p class="product-name">Titan Chrono</p>
+                <p class="product-price">$299.99</p>
+                <p class="description">A robust chronograph watch with a sporty design, perfect for any outdoor
+                    adventure.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 2 -->
+            <div class="product-card">
+                <img src="AtlasDiver.webp" alt="Atlas Diver's Watch">
+                <p class="product-name">Atlas Diver</p>
+                <p class="product-price">$570</p>
+                <p class="description">A durable diver's watch with water resistance perfect for underwater
+                    explorations.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 3 -->
+            <div class="product-card">
+                <img src="VanguardAutomatic.webp" alt="Vanguard Automatic Watch">
+                <p class="product-name">Vanguard Automatic</p>
+                <p class="product-price">$799</p>
+                <p class="description">An exquisite automatic watch showcasing precision engineering and timeless
+                    elegance.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+
+            <!-- Product Card 4 -->
+            <div class="product-card">
+                <img src="ClassicLeather.jpg" alt="Classic Leather Strap Watch">
+                <p class="product-name">Classic Leather</p>
+                <p class="product-price">$350</p>
+                <p class="description">A timeless leather strap watch that combines sophistication with everyday
+                    wearability.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 5 -->
+            <div class="product-card">
+                <img src="Steel&Titanium.webp" alt="Steel & Titanium Watch">
+                <p class="product-name">Steel & Titanium</p>
+                <p class="product-price">$620</p>
+                <p class="description">A modern steel and titanium watch, ideal for the contemporary gentleman.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 6 -->
+            <div class="product-card">
+                <img src="NauticalQuartz.webp" alt="Nautical Quartz Watch">
+                <p class="product-name">Nautical Quartz</p>
+                <p class="product-price">$470</p>
+                <p class="description">An elegant nautical quartz watch that pairs well with both casual and formal
+                    attire.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 7 -->
+            <div class="product-card">
+                <img src="PilotWatch.webp" alt="Pilot Watch">
+                <p class="product-name">Pilot Watch</p>
+                <p class="product-price">$390</p>
+                <p class="description">A stylish pilot watch with a large dial for easy readability during flights.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 8 -->
+            <div class="product-card">
+                <img src="UrbanSport.webp" alt="Urban Sport Watch">
+                <p class="product-name">Urban Sport</p>
+                <p class="product-price">$530</p>
+                <p class="description">A robust urban sport watch designed for the active lifestyle, combining style and
+                    functionality.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+            <!-- Product Card 9 -->
+            <div class="product-card">
+                <img src="PerformanceSmart.webp" alt="Performance Smart Watch">
+                <p class="product-name">Performance Smart</p>
+                <p class="product-price">$750</p>
+                <p class="description">A high-tech smart watch designed for performance tracking and connectivity.</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-top">
+
+            <div class="footer-links">
+                <a href="../HomePage/home.html">Home</a>
+                <a href="../WomanWatches(ProductPage)/women.php">Products</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+
+            <form class="newsletter">
+                <label for="newsletter-email">Subscribe for updates:</label>
+                <input type="email" id="newsletter-email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <div class="footer-description">
+            <p>Kairos Watches — Timeless Elegance, Crafted for the Perfect Moment.</p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024, 2025 Kairos Watches. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <a href="#products-gallery" id="arrow"></a>
+
+    <script>
+        const arrow = document.getElementById('arrow');
+
+        // Show arrow when scrolled down 200px
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 200) {
+                arrow.style.display = 'block';
+            } else {
+                arrow.style.display = 'none';
+            }
+        });
+
+        // Smooth scroll back to products-gallery when arrow clicked
+        arrow.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.getElementById('products-gallery');
+            window.scrollTo({
+                top: target.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

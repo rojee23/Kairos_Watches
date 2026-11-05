@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairos Watches</title>
+    <link rel="stylesheet" href="home.css">
+
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="site-logo">Kairos Watches</div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="home.html">Home</a></li>
+
+                <li>
+                    <a href="#">Products ▾</a>
+                    <div class="dropdown-menu">
+                        <a id="men" href="../MenWatches(AnyPage)/men.html">Men Watches</a>
+                        <a id="women" href="../WomanWatches(ProductPage)/women.php">Women Watches</a>
+                    </div>
+                </li>
+
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="image-container">
+        <img src="MainHomePic.png" alt="Kairos Watches hero image" width="100%">
+        <div class="image-text">
+            <h1>Timeless ~Precision</h1>
+            <p>Discover timeless elegance and precision in every detail.</p>
+            <br>
+            <a href="../WomanWatches(ProductPage)/women.php" class="cta-button">Explore Collection</a>
+        </div>
+    </section>
+    <br>
+    <!-- About -->
+    <section id="about" class="about-section">
+        <h2>About Us</h2>
+        <p>
+            At Kairos Watches, we believe time is more than just hours and minutes —
+            it is the essence of life’s most meaningful moments. Inspired by the Greek concept of <em>Kairos</em>,
+            the opportune moment, our timepieces are crafted to embody elegance, precision, and timeless design.
+            Every Kairos timepiece blends modern minimalism with traditional watchmaking artistry,
+            designed for those who value understated luxury and craftsmanship.
+        </p>
+    </section>
+
+    <!-- Gallery Slider -->
+    <div class="slider-controls">
+        <button class="slider-button prev" onclick="changeSlide(-1)">&#10094;</button>
+
+        <div class="slider" id="watches-slider">
+            <div class="slide">
+                <img src="GreenWithGold.jpg" alt="Green with gold Kairos watch">
+                <p class="watch-name">Viridian Luxe</p>
+                <p class="watch-price">$499</p>
+            </div>
+            <div class="slide">
+                <img src="Gold.jpg" alt="All gold Kairos watch">
+                <p class="watch-name">Solstice</p>
+                <p class="watch-price">$699</p>
+            </div>
+            <div class="slide">
+                <img src="ClassicGold.jpg" alt="Classic gold Kairos watch">
+                <p class="watch-name">Classic Gold</p>
+                <p class="watch-price">$499</p>
+            </div>
+            <div class="slide">
+                <img src="BrownGreenGold.jpg" alt="Brown and green Kairos watch">
+                <p class="watch-name">Heritage Duo</p>
+                <p class="watch-price">$699</p>
+            </div>
+            <div class="slide">
+                <img src="BlueMenWatch.jpg" alt="Blue dial Kairos men’s watch">
+                <p class="watch-name">Deep Sea Chronos</p>
+                <p class="watch-price">$799</p>
+            </div>
+            <div class="slide">
+                <img src="MenWatchSteel.webp" alt="Steel Kairos men’s watch">
+                <p class="watch-name">Modern Steel</p>
+                <p class="watch-price">$599</p>
+            </div>
+            <div class="slide">
+                <img src="BlackElegance.jpg" alt="Black dial Kairos watch">
+                <p class="watch-name">Black Elegance</p>
+                <p class="watch-price">$550</p>
+            </div>
+            <div class="slide">
+                <img src="silver-green.jpg" alt="Minimalist Kairos watch">
+                <p class="watch-name">The Minimalist</p>
+                <p class="watch-price">$399</p>
+            </div>
+            <div class="slide">
+                <img src="blackNgold.jpg" alt="Ebony Kairos men’s watch">
+                <p class="watch-name">Ebony Classic</p>
+                <p class="watch-price">$200</p>
+            </div>
+        </div>
+
+        <button class="slider-button next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+    <!-- Latest News -->
+    <section class="news-section">
+        <h2>Latest News</h2>
+        <article>
+            <h3>December 2025 — Winter Collection Launch</h3>
+            <p>Introducing brushed brass accents and forest‑green dials, blending natural beauty with contemporary
+                design.</p>
+        </article>
+        <article>
+            <h3>Eco‑Conscious Initiative</h3>
+            <p>We are proud to announce sustainable packaging for all Kairos watches, reflecting our commitment to
+                responsibility.</p>
+        </article>
+        <article>
+            <h3>Upcoming Limited Edition</h3>
+            <p>Stay tuned for our exclusive release — available only to registered members.</p>
+        </article>
+
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <p>
+            We value every connection. Whether you have questions about our collections,
+            need assistance with your order, or simply want to learn more about our brand,
+            our team is here to help.
+        </p>
+        <form class="contact-form">
+            <div class="form-field">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-field">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-field">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <input id="submit" type="submit" value="Submit">
+        </form>
+
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3326.5322316552724!2d36.2981804!3d33.5135453!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1518e7325f4bf5e5%3A0xaad2ca1e4e1f4638!2z2YjZg9in2YTYqSDYs9in2LnYp9iqINix2YjZhNmD2LMgUk9MRVg!5e0!3m2!1sen!2s!4v1764945663353!5m2!1sen!2s"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-apps">
+                <h3>Download Our App</h3>
+                <a href="#"><img src="appstore.webp" alt="App Store"></a>
+                <a href="#"><img src="googleplay.webp" alt="Google Play"></a>
+            </div>
+
+            <div class="footer-links">
+                <a href="../HomePage/home.html">Home</a>
+                <a href="../WomanWatches(ProductPage)/women.php">Products</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+
+            <form class="newsletter">
+                <label for="newsletter-email">Subscribe for updates:</label>
+                <input type="email" id="newsletter-email" placeholder="Enter your email">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <div class="footer-description">
+            <p>Kairos Watches — Timeless Elegance, Crafted for the Perfect Moment.</p>
+            <p>Follow us on <a href="#">Facebook</a> and <a href="#">Instagram</a>.</p>
+        </div>
+
+        <hr>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024, 2025 Kairos Watches. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Slider Script -->
+    <script>
+        const slider = document.getElementById('watches-slider');
+
+        function changeSlide(direction) {
+            const slideWidth = slider.querySelector('.slide').offsetWidth + 20; // include gap
+            slider.scrollBy({
+                left: direction * slideWidth,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+    <!-- Back to Top Arrow -->
+    <a href="#image-container" id="arrow">
+    </a>
+
+    <script>
+        const arrow = document.getElementById('arrow');
+
+        // Show arrow when scrolled down 200px
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 200) {
+                arrow.style.display = 'block';
+            } else {
+                arrow.style.display = 'none';
+            }
+        });
+
+        // scroll back to hero when arrow clicked
+        arrow.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.getElementById('image-container');
+            window.scrollTo({
+                top: target.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

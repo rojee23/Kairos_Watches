@@ -1,0 +1,393 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    font-family: 'Inter', 'HelveticaNeue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #000000;
+    background-color: #f4f4f4;
+    scroll-behavior: smooth;
+}
+
+a {
+    color: #C9A050;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #000000;
+}
+
+h1,
+h2,
+h3 {
+    font-family: "Times New Roman", serif;
+    font-weight: 400;
+    margin-bottom: 0.5em;
+    color: #222222;
+}
+
+section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- Header and Navigation --- */
+header {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+.site-logo {
+    font-family: "Times New Roman", serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #c9a050;
+    letter-spacing: 1px;
+    background: linear-gradient(70deg, #ffffff, #C9A050);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.main-nav ul {
+    display: flex;
+    list-style: none;
+}
+
+.main-nav a {
+    padding: 10px 15px;
+    display: block;
+    color: #ffffff;
+    transition: color 0.3s ease;
+    border-radius: 4px;
+}
+
+.main-nav a:hover {
+    color: #C9A050;
+    background-color: rgba(201, 160, 80, 0.1);
+}
+
+/* --- Admin Content Area --- */
+.admin-container {
+    padding-top: 100px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.admin-container h1 {
+    font-size: 3rem;
+    text-align: center;
+    color: #000000;
+    padding-bottom: 20px;
+}
+
+.admin-container h2 {
+    font-size: 1.8rem;
+    border-bottom: 2px solid #C9A050;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+/* Form and List */
+.form-card,
+.list-card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    border: 1px solid #C9A050;
+}
+
+/* Form */
+.product-form input:not([type="submit"]),
+.product-form textarea,
+.product-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+    border-color: #C9A050;
+    outline: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #222;
+}
+
+/* button */
+.submit-button,
+.cancel-button {
+    background-color: #C9A050;
+    color: #000000;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 10px;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s, transform 0.1s;
+    display: inline-block;
+}
+
+.submit-button:hover {
+    background-color: #B28E43;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.cancel-button {
+    background-color: #ccc;
+    color: #000000;
+}
+
+.cancel-button:hover {
+    background-color: #aaa;
+    color: #000000;
+}
+
+
+/* products-table (using .products-table from admin.php) */
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.products-table th,
+.products-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: middle;
+}
+
+.products-table th {
+    background-color: #000000;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.products-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.actions a,
+.actions button {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border-radius: 4px;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.actions a.edit {
+    background-color: #C9A050;
+    color: #000000;
+}
+
+.actions a.edit:hover {
+    background-color: #B28E43;
+    color: #ffffff;
+}
+
+.actions button.delete {
+    background-color: #d9534f;
+    color: #ffffff;
+}
+
+.actions button.delete:hover {
+    background-color: #c9302c;
+}
+
+/* Message Box for success/error (using .message-box from admin.php) */
+.message-box {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.message-box.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message-box.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* for delete confirmation */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    max-width: 90%;
+    width: 400px;
+    text-align: center;
+}
+
+.modal-buttons button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+
+/* media query */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 20px;
+    }
+
+    .admin-container {
+        padding-top: 80px;
+    }
+
+    /* products table Styling for mobile */
+    .products-table,
+    .products-table tbody,
+    .products-table tr,
+    .products-table td {
+        display: block;
+    }
+
+    .products-table thead {
+        display: none;
+    }
+
+    .products-table tr {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Ensure the main product info section is grouped */
+    .products-table tr>td:first-child {
+        border-top: none;
+    }
+
+    .products-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Target the product name/id/price group for better spacing */
+    .products-table td:nth-child(-n+4) {
+        /* This targets ID, Category, Name, Price for tight grouping */
+        font-size: 1rem;
+    }
+
+    .products-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #555;
+        width: 40%;
+        flex-shrink: 0;
+        padding-right: 15px;
+    }
+
+    /* Special layout for the image preview row */
+    .products-table td[data-label="Preview"] {
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: none;
+        padding-bottom: 15px;
+    }
+
+    .products-table td[data-label="Preview"]::before {
+        width: 100%;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+    }
+
+    /* Ensure action buttons are centered at the bottom of the card */
+    .actions {
+        border-top: 1px solid #ccc;
+        padding-top: 15px;
+        text-align: center;
+        display: block;
+    }
+}

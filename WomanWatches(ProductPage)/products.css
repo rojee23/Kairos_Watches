@@ -1,0 +1,402 @@
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            font-family: "HelveticaNeue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background-color: #ffffff;
+            scroll-behavior: smooth;
+        }
+
+        a {
+            color: #000000;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #C9A050;
+        }
+
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Times New Roman", serif;
+            font-weight: 400;
+            margin-bottom: 0.5em;
+        }
+
+        section {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+        /* --- Header and Navigation --- */
+        header {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgb(0, 3, 29, 1);
+            width: 100%;
+        }
+
+
+        .site-logo {
+            font-family: "Times New Roman", serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #c9a050;
+            letter-spacing: 1px;
+            background: linear-gradient(70deg, #ffffff 5%, #C9A050 30%, #C9A050 60%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInLeft 1.5s ease-in-out backwards;
+        }
+
+        @keyframes fadeInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+                /* start off-screen to the left */
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+                /* end in normal position */
+            }
+        }
+
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .main-nav li {
+            position: relative;
+        }
+
+        .main-nav a {
+            padding: 10px 15px;
+            display: block;
+            color: #ffffff;
+            transition: color 0.3s ease;
+        }
+
+        .main-nav a:hover {
+            color: #C9A050;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #000000;
+            min-width: 160px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            flex-direction: column;
+        }
+
+        .main-nav li:hover .dropdown-menu {
+            display: flex;
+        }
+
+        .dropdown-menu a {
+            padding: 10px 15px;
+            color: #ffffff;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #C9A050;
+            color: #000000;
+        }
+
+        .main-nav ul li:last-child a:hover {
+            background-color: #B28E43;
+            color: #ffffff;
+            border-radius: 5%;
+        }
+
+        /* product gallery */
+        .products-gallery {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .products-gallery h1 {
+            margin-top: 50px;
+            font-size: 3rem;
+            text-transform: uppercase;
+            color: #222222;
+            margin-bottom: 0.5em;
+            font-family: "Times New Roman", serif;
+        }
+
+        .products-gallery p.subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            color: #942323;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            text-transform: capitalize;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background-color: #f8f8f8;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-color: #C9A050;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            border: 5px solid #C9A050;
+        }
+
+        .product-name {
+            font-family: "Times New Roman", serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #222222;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            color: #C9A050;
+            font-weight: 600;
+        }
+
+        .buy-button {
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 18px;
+            background-color: #000000;
+            opacity: 0.9;
+            color: #ffffff;
+            border-radius: 4px;
+            border: 2px solid;
+            border-color: #B28E43;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-family: 'Times New Roman', Times, serif;
+            transition: background-color 0.3s ease;
+        }
+
+        .buy-button:hover {
+            background-color: #C9A050;
+            color: #ffffff;
+            border-color: #000000;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            color: #555555;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 40px 20px;
+            font-size: 0.95rem;
+        }
+
+        .footer-top {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+
+        .footer-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+
+        .footer-links a:hover {
+            color: #C9A050;
+        }
+
+        .newsletter {
+            text-align: right;
+        }
+
+        .newsletter label {
+            display: block;
+            color: #C9A050;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .newsletter input[type="email"] {
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px 0 0 4px;
+            background-color: #222222;
+            color: #ffffff;
+            width: 180px;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .newsletter button {
+            padding: 8px 15px;
+            background-color: #C9A050;
+            color: #000000;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-left: -5px;
+        }
+
+        .newsletter button:hover {
+            background-color: #B28E43;
+            color: #ffffff;
+        }
+
+        .footer-description {
+            max-width: 1000px;
+            margin: 0 auto 20px;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #C9A050;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .site-footer hr {
+            border: 0;
+            border-top: 2px solid #222222;
+            margin: 20px 0;
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.75rem;
+            color: #aaa;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #arrow {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            width: 40px;
+            height: 40px;
+            background-color: #000000;
+            border: 2px solid #C9A050;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0.8;
+            transition: opacity 0.3s, background-color 0.3s;
+        }
+
+        #arrow:hover {
+            opacity: 1;
+            background-color: #222222;
+        }
+
+        #arrow::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid #C9A050;
+            transform: translate(-50%, -50%) translateY(2px);
+        }
+
+        /* Mobile (max-width: 600px) */
+        @media (max-width: 600px) {
+            .site-logo {
+                font-size: 1.4rem;
+            }
+
+            .slide {
+                flex: 0 0 80%;
+            }
+
+            .newsletter input[type="email"],
+            .newsletter button {
+                width: 100%;
+                border-radius: 4px;
+                margin-bottom: 5px;
+            }
+
+        }
