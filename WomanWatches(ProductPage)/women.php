@@ -29,6 +29,11 @@ if ($result && $result->num_rows > 0) {
         $products[] = $row;
     }
 }
+
+function productImageUrl($imagePath)
+{
+    return strpos($imagePath, 'upload/') === 0 ? '../' . $imagePath : $imagePath;
+}
 ?>
 
 <!DOCTYPE html>
@@ -54,8 +59,8 @@ if ($result && $result->num_rows > 0) {
                         <a id="women" href="women.php">Women Watches</a>
                     </div>
                 </li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="../HomePage/home.html#about">About</a></li>
+                <li><a href="../HomePage/home.html#contact">Contact Us</a></li>
                 <li><a href="../LogIn/logout.php">Log Out</a></li>
             </ul>
         </nav>
@@ -75,9 +80,10 @@ if ($result && $result->num_rows > 0) {
             <?php else: ?>
                 <!--  generates product cards from the database -->
                 <?php foreach ($products as $product): ?>
+                    <?php $productImage = productImageUrl($product['image_url']); ?>
                     <div class="product-card">
-                        <img src="<?php echo htmlspecialchars($product['image_url']); ?>"
-                            alt="<?php echo htmlspecialchars($product['name']); ?>"
+                        <img src="<?php echo htmlspecialchars($productImage, ENT_QUOTES, 'UTF-8'); ?>"
+                            alt="<?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>"
                             onerror="this.onerror=null; this.src='https://placehold.co/300x350/C9A050/000000?text=Women\'s+Watch';">
                         <p class="product-name"><?php echo htmlspecialchars($product['name']); ?></p>
                         <p class="product-price">$<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></p>
@@ -96,8 +102,8 @@ if ($result && $result->num_rows > 0) {
                 <a href="../HomePage/home.html">Home</a>
                 <a href="women.php">Women's Collection</a>
                 <a href="../MenWatches(AnyPage)/men.html">Men's Collection</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
+                <a href="../HomePage/home.html#about">About</a>
+                <a href="../HomePage/home.html#contact">Contact</a>
             </div>
             <form class="newsletter">
                 <label for="newsletter-email">Subscribe for updates:</label>

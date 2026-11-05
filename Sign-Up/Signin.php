@@ -3,7 +3,7 @@
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    include 'connection.php';
+    require_once __DIR__ . '/Connection.php';
 
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');

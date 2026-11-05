@@ -1,0 +1,69 @@
+.dashboard-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1000px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 120px 24px 50px;
+}
+
+.dashboard-card {
+    width: 100%;
+    max-width: 760px;
+    padding: clamp(24px, 5vw, 56px);
+    border: 1px solid rgba(201, 160, 80, 0.55);
+    border-radius: 12px;
+    background: linear-gradient(145deg, #111111, #1a1a1a);
+    color: #f3d88b;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.dashboard-card h1 {
+    margin-bottom: 12px;
+    color: #f3d88b;
+    font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.dashboard-intro {
+    max-width: 650px;
+    margin: 8px auto;
+    color: #dddddd;
+}
+
+.dashboard-email {
+    margin: 24px 0 0;
+    overflow-wrap: anywhere;
+    color: #c9a050;
+    font-weight: 700;
+}
+
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.dashboard-button {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 6px;
+    background: #c9a050;
+    color: #000000;
+    font-weight: 700;
+}
+
+.dashboard-button:hover {
+    background: #b28e43;
+    color: #ffffff;
+}
+
+@media (max-width: 600px) {
+    .dashboard-container {
+        padding: 120px 16px 40px;
+    }
+}

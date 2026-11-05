@@ -3,7 +3,7 @@ session_start();
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    include 'connection.php';
+    require_once __DIR__ . '/Connection.php';
 
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (password_verify($password, $hashedPassword)) {
                 // Admin login successful
+                session_regenerate_id(true);
+                unset($_SESSION['user_id'], $_SESSION['email']);
                 $_SESSION['admin_id'] = $id;
                 $_SESSION['admin_email'] = $email;
                 header("Location: ../AdminPage/admin.php");
@@ -45,9 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 if (password_verify($password, $hashedPassword)) {
                     // User login successful
+                    session_regenerate_id(true);
+                    unset($_SESSION['admin_id'], $_SESSION['admin_email']);
                     $_SESSION['user_id'] = $id;
                     $_SESSION['email'] = $email;
-                    header("Location: ../HomePage/home.html");
+                    header("Location: ../user_dashboard.php");
                     exit();
                 } else {
                     $message = "<p style='color:#ff6b6b; font-weight:bold;'>Wrong password!</p>";
@@ -61,6 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $conn->close();
+}
+
+if (isset($_GET['msg'])) {
+    $message = "<p style='color:#C9A050; font-weight:bold;'>" .
+        htmlspecialchars($_GET['msg'], ENT_QUOTES, 'UTF-8') . "</p>";
 }
 ?>
 <!DOCTYPE html>
@@ -192,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
             <button type="submit" class="login-btn">Login</button>
         </form>
-        <p class="alt">Don't have an account? <a href="../Sign-Up/signin.php">Sign Up</a></p>
+        <p class="alt">Don't have an account? <a href="../Sign-Up/Signin.php">Sign Up</a></p>
     </div>
 </body>
 
