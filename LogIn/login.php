@@ -19,6 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->store_result();
 
             if ($stmt->num_rows > 0) {
+                $id = 0;
+                $hashedPassword = '';
                 $stmt->bind_result($id, $hashedPassword);
                 $stmt->fetch();
 
@@ -50,6 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->store_result();
 
                 if ($stmt->num_rows > 0) {
+                    $id = 0;
+                    $hashedPassword = '';
                     $stmt->bind_result($id, $hashedPassword);
                     $stmt->fetch();
 
