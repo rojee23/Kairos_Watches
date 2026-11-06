@@ -3,40 +3,17 @@ session_start();
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    require_once __DIR__ . '/Connection.php';
+    try {
+        require_once __DIR__ . '/Connection.php';
 
-    $email = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-    if ($email === "" || $password === "") {
-        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Please fill all fields!</p>";
-    } else {
-        // 1. Check admin_users first
-        $stmt = $conn->prepare("SELECT id, password FROM admin_users WHERE email = ? LIMIT 1");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $hashedPassword);
-            $stmt->fetch();
-
-            if (password_verify($password, $hashedPassword)) {
-                // Admin login successful
-                session_regenerate_id(true);
-                unset($_SESSION['user_id'], $_SESSION['email']);
-                $_SESSION['admin_id'] = $id;
-                $_SESSION['admin_email'] = $email;
-                header("Location: ../AdminPage/admin.php");
-                exit();
-            } else {
-                $message = "<p style='color:#ff6b6b; font-weight:bold;'>Wrong password!</p>";
-            }
+        if ($email === "" || $password === "") {
+            $message = "<p style='color:#ff6b6b; font-weight:bold;'>Please fill all fields!</p>";
         } else {
-            $stmt->close();
-
-            // 2. Check normal users
-            $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ? LIMIT 1");
+            // 1. Check admin_users first
+            $stmt = $conn->prepare("SELECT id, password FROM admin_users WHERE email = ? LIMIT 1");
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $stmt->store_result();
@@ -46,25 +23,67 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt->fetch();
 
                 if (password_verify($password, $hashedPassword)) {
-                    // User login successful
+                    // Admin login successful
                     session_regenerate_id(true);
-                    unset($_SESSION['admin_id'], $_SESSION['admin_email']);
-                    $_SESSION['user_id'] = $id;
-                    $_SESSION['email'] = $email;
-                    header("Location: ../user_dashboard.php");
+                    unset($_SESSION['user_id'], $_SESSION['email']);
+                    $_SESSION['admin_id'] = $id;
+                    $_SESSION['admin_email'] = $email;
+                    setcookie('user_email', $email, [
+                        'expires' => time() + (7 * 24 * 60 * 60),
+                        'path' => '/',
+                        'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+                        'httponly' => true,
+                        'samesite' => 'Lax'
+                    ]);
+                    header("Location: ../AdminPage/admin.php");
                     exit();
                 } else {
                     $message = "<p style='color:#ff6b6b; font-weight:bold;'>Wrong password!</p>";
                 }
             } else {
-                $message = "<p style='color:#ff6b6b; font-weight:bold;'>Email not found!</p>";
+                $stmt->close();
+
+                // 2. Check normal users
+                $stmt = $conn->prepare("SELECT id, password FROM users WHERE email = ? LIMIT 1");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $stmt->store_result();
+
+                if ($stmt->num_rows > 0) {
+                    $stmt->bind_result($id, $hashedPassword);
+                    $stmt->fetch();
+
+                    if (password_verify($password, $hashedPassword)) {
+                        // User login successful
+                        session_regenerate_id(true);
+                        unset($_SESSION['admin_id'], $_SESSION['admin_email']);
+                        $_SESSION['user_id'] = $id;
+                        $_SESSION['email'] = $email;
+                        setcookie('user_email', $email, [
+                            'expires' => time() + (7 * 24 * 60 * 60),
+                            'path' => '/',
+                            'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+                            'httponly' => true,
+                            'samesite' => 'Lax'
+                        ]);
+                        header("Location: ../user_dashboard.php");
+                        exit();
+                    } else {
+                        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Wrong password!</p>";
+                    }
+                } else {
+                    $message = "<p style='color:#ff6b6b; font-weight:bold;'>Email not found!</p>";
+                }
             }
+
+            $stmt->close();
         }
 
-        $stmt->close();
+        $conn->close();
+    } catch (Throwable $exception) {
+        error_log("Login failed: " . $exception->getMessage());
+        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Login is temporarily unavailable. Please try again later.</p>";
     }
-
-    $conn->close();
 }
 
 if (isset($_GET['msg'])) {

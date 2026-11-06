@@ -3,47 +3,50 @@
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    require_once __DIR__ . '/Connection.php';
+    try {
+        require_once __DIR__ . '/Connection.php';
 
-    $email = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $password = trim($_POST['password'] ?? '');
 
-    if ($email === "" || $password === "") {
-        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Please fill all fields!</p>";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Invalid email format!</p>";
-    } elseif (strlen($password) < 6) {
-        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Password must be at least 6 characters.</p>";
-    } else {
-        // تحقق إذا الإيميل موجود بالفعل
-        $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result();
-
-        if ($stmt->num_rows > 0) {
-            $message = "<p style='color:#ff6b6b; font-weight:bold;'>This email is already registered.</p>";
-            $stmt->close();
+        if ($email === "" || $password === "") {
+            $message = "<p style='color:#ff6b6b; font-weight:bold;'>Please fill all fields!</p>";
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $message = "<p style='color:#ff6b6b; font-weight:bold;'>Invalid email format!</p>";
+        } elseif (strlen($password) < 6) {
+            $message = "<p style='color:#ff6b6b; font-weight:bold;'>Password must be at least 6 characters.</p>";
         } else {
-            $stmt->close();
+            $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            $insert = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
-            $insert->bind_param("ss", $email, $hashedPassword);
-
-            if ($insert->execute()) {
-                header("Location: ../LogIn/login.php?msg=Account+created+successfully");
-                exit();
+            if ($stmt->num_rows > 0) {
+                $message = "<p style='color:#ff6b6b; font-weight:bold;'>This email is already registered.</p>";
+                $stmt->close();
             } else {
-                $message = "<p style='color:#ff6b6b; font-weight:bold;'>Error: " . htmlspecialchars($conn->error) . "</p>";
+                $stmt->close();
+
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                $insert = $conn->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
+                $insert->bind_param("ss", $email, $hashedPassword);
+
+                if ($insert->execute()) {
+                    header("Location: ../LogIn/login.php?msg=Account+created+successfully");
+                    exit();
+                }
+
+                $message = "<p style='color:#ff6b6b; font-weight:bold;'>Registration could not be completed. Please try again later.</p>";
+                $insert->close();
             }
-
-            $insert->close();
         }
-    }
 
-    $conn->close();
+        $conn->close();
+    } catch (Throwable $exception) {
+        error_log("Registration failed: " . $exception->getMessage());
+        $message = "<p style='color:#ff6b6b; font-weight:bold;'>Registration is temporarily unavailable. Please try again later.</p>";
+    }
 }
 ?>
 <!DOCTYPE html>

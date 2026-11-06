@@ -10,24 +10,31 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once __DIR__ . '/LogIn/Connection.php';
+try {
+    require_once __DIR__ . '/LogIn/Connection.php';
 
-$userId = (int) $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT email FROM users WHERE id = ? LIMIT 1");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$stmt->bind_result($userEmail);
+    $userId = (int) $_SESSION['user_id'];
+    $stmt = $conn->prepare("SELECT email FROM users WHERE id = ? LIMIT 1");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $stmt->bind_result($userEmail);
 
-if (!$stmt->fetch()) {
+    if (!$stmt->fetch()) {
+        $stmt->close();
+        $conn->close();
+        unset($_SESSION['user_id'], $_SESSION['email']);
+        header("Location: LogIn/login.php?msg=Please+sign+in+again");
+        exit();
+    }
+
     $stmt->close();
     $conn->close();
-    unset($_SESSION['user_id'], $_SESSION['email']);
-    header("Location: LogIn/login.php?msg=Please+sign+in+again");
-    exit();
+    $dashboardError = '';
+} catch (Throwable $exception) {
+    error_log("User dashboard lookup failed: " . $exception->getMessage());
+    $userEmail = $_SESSION['email'] ?? '';
+    $dashboardError = 'Your dashboard details are temporarily unavailable. Please try again later.';
 }
-
-$stmt->close();
-$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,8 +63,12 @@ $conn->close();
     <main class="dashboard-container">
         <section class="dashboard-card">
             <h1>Welcome to Kairos Watches</h1>
+            <?php if ($dashboardError !== ''): ?>
+                <p class="dashboard-intro"><?php echo htmlspecialchars($dashboardError, ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
             <p class="dashboard-intro">You have successfully logged in.</p>
             <p class="dashboard-intro">Explore our collections and discover your next timepiece.</p>
+            <p class="dashboard-intro">Welcome back <?php echo htmlspecialchars($_COOKIE['user_email'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
             <p class="dashboard-email"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p>
             <div class="dashboard-actions">
                 <a class="dashboard-button" href="HomePage/home.html">Go To Home Page</a>

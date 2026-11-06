@@ -13,21 +13,27 @@ $username = "root";
 $password = "";
 $dbname = "kairos_db";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT * FROM products ORDER BY name ASC";
-$result = $conn->query($sql);
-
+$conn = null;
 $products = [];
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
+$databaseError = '';
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->set_charset("utf8mb4");
+
+    $sql = "SELECT * FROM products ORDER BY name ASC";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
     }
+} catch (Throwable $exception) {
+    error_log("Product listing query failed: " . $exception->getMessage());
+    $databaseError = 'The product collection is temporarily unavailable. Please try again later.';
 }
 
 function productImageUrl($imagePath)
@@ -73,7 +79,11 @@ function productImageUrl($imagePath)
             timeless style.</p>
 
         <div class="products-grid">
-            <?php if (empty($products)): ?>
+            <?php if ($databaseError !== ''): ?>
+                <p style="grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 1.2rem;">
+                    <?php echo htmlspecialchars($databaseError, ENT_QUOTES, 'UTF-8'); ?>
+                </p>
+            <?php elseif (empty($products)): ?>
                 <p style="grid-column: 1 / -1; text-align: center; padding: 40px; font-size: 1.2rem;">
                     No women's watches are currently available. Please check back soon!
                 </p>
@@ -179,5 +189,7 @@ function productImageUrl($imagePath)
 </html>
 
 <?php
-$conn->close();
+if ($conn instanceof mysqli) {
+    $conn->close();
+}
 ?>

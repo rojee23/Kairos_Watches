@@ -13,14 +13,6 @@ $username = "root";
 $password = "";
 $dbname = "kairos_db"; 
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$conn->set_charset("utf8mb4");
-
 // Function to safely sanitize input
 function sanitize($conn, $data)
 {
@@ -34,159 +26,176 @@ function productImageUrl($imagePath)
 
 $message = '';
 $messageType = 'success';
+$conn = null;
+$products = [];
+$edit_product = null;
+$uploadedFilePath = null;
 
-//create or update product
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = sanitize($conn, $_POST['name'] ?? '');
-    $priceInput = trim($_POST['price'] ?? '');
-    $description = sanitize($conn, $_POST['description'] ?? '');
-    $product_id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-    $image_url = '';
-    $uploadedFilePath = null;
-    $uploadError = '';
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    if ($product_id > 0) {
-        $existing = $conn->prepare("SELECT image_url FROM products WHERE id = ?");
-        $existing->bind_param("i", $product_id);
-        $existing->execute();
-        $existing->bind_result($existingImagePath);
-        if (!$existing->fetch()) {
-            $uploadError = "The product you are trying to edit no longer exists.";
-        }
-        $existing->close();
-        $image_url = $existingImagePath ?? '';
-    }
+try {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn->set_charset("utf8mb4");
 
-    if ($uploadError === '') {
-        $file = $_FILES['image'] ?? null;
+    //create or update product
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $name = sanitize($conn, $_POST['name'] ?? '');
+        $priceInput = trim($_POST['price'] ?? '');
+        $description = sanitize($conn, $_POST['description'] ?? '');
+        $product_id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $image_url = '';
+        $uploadError = '';
 
-        if ($file === null || $file['error'] === UPLOAD_ERR_NO_FILE) {
-            if ($product_id === 0) {
-                $uploadError = "Please select a product image.";
+        if ($product_id > 0) {
+            $existing = $conn->prepare("SELECT image_url FROM products WHERE id = ?");
+            $existing->bind_param("i", $product_id);
+            $existing->execute();
+            $existing->bind_result($existingImagePath);
+            if (!$existing->fetch()) {
+                $uploadError = "The product you are trying to edit no longer exists.";
             }
-        } else {
-            $uploadErrors = [
-                UPLOAD_ERR_INI_SIZE => "The image exceeds the server upload limit.",
-                UPLOAD_ERR_FORM_SIZE => "The image exceeds the form upload limit.",
-                UPLOAD_ERR_PARTIAL => "The image was only partially uploaded. Please try again.",
-                UPLOAD_ERR_NO_TMP_DIR => "The server upload temporary folder is missing.",
-                UPLOAD_ERR_CANT_WRITE => "The server could not save the uploaded image.",
-                UPLOAD_ERR_EXTENSION => "A server extension prevented the image upload."
-            ];
+            $existing->close();
+            $image_url = $existingImagePath ?? '';
+        }
 
-            if ($file['error'] !== UPLOAD_ERR_OK) {
-                $uploadError = $uploadErrors[$file['error']] ?? "The image upload failed.";
+        if ($uploadError === '') {
+            $file = $_FILES['image'] ?? null;
+
+            if ($file === null || $file['error'] === UPLOAD_ERR_NO_FILE) {
+                if ($product_id === 0) {
+                    $uploadError = "Please select a product image.";
+                }
             } else {
-                $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                $allowedMimeTypes = [
-                    'jpg' => 'image/jpeg',
-                    'jpeg' => 'image/jpeg',
-                    'png' => 'image/png',
-                    'webp' => 'image/webp'
+                $uploadErrors = [
+                    UPLOAD_ERR_INI_SIZE => "The image exceeds the server upload limit.",
+                    UPLOAD_ERR_FORM_SIZE => "The image exceeds the form upload limit.",
+                    UPLOAD_ERR_PARTIAL => "The image was only partially uploaded. Please try again.",
+                    UPLOAD_ERR_NO_TMP_DIR => "The server upload temporary folder is missing.",
+                    UPLOAD_ERR_CANT_WRITE => "The server could not save the uploaded image.",
+                    UPLOAD_ERR_EXTENSION => "A server extension prevented the image upload."
                 ];
-                $fileInfo = new finfo(FILEINFO_MIME_TYPE);
-                $mimeType = $fileInfo->file($file['tmp_name']);
-                $imageInfo = getimagesize($file['tmp_name']);
 
-                if (!isset($allowedMimeTypes[$extension]) || $mimeType !== $allowedMimeTypes[$extension] || $imageInfo === false) {
-                    $uploadError = "Only valid JPG, JPEG, PNG, and WEBP image files are allowed.";
+                if ($file['error'] !== UPLOAD_ERR_OK) {
+                    $uploadError = $uploadErrors[$file['error']] ?? "The image upload failed.";
                 } else {
-                    $uploadDirectory = __DIR__ . '/../upload';
-                    if (!is_dir($uploadDirectory) && !mkdir($uploadDirectory, 0755, true)) {
-                        $uploadError = "The upload folder could not be created.";
-                    } else {
-                        $fileName = bin2hex(random_bytes(16)) . '.' . $extension;
-                        $uploadedFilePath = $uploadDirectory . DIRECTORY_SEPARATOR . $fileName;
+                    $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+                    $allowedMimeTypes = [
+                        'jpg' => 'image/jpeg',
+                        'jpeg' => 'image/jpeg',
+                        'png' => 'image/png',
+                        'webp' => 'image/webp'
+                    ];
+                    $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+                    $mimeType = $fileInfo->file($file['tmp_name']);
+                    $imageInfo = getimagesize($file['tmp_name']);
 
-                        if (!move_uploaded_file($file['tmp_name'], $uploadedFilePath)) {
-                            $uploadedFilePath = null;
-                            $uploadError = "The uploaded image could not be saved. Please try again.";
+                    if (!isset($allowedMimeTypes[$extension]) || $mimeType !== $allowedMimeTypes[$extension] || $imageInfo === false) {
+                        $uploadError = "Only valid JPG, JPEG, PNG, and WEBP image files are allowed.";
+                    } else {
+                        $uploadDirectory = __DIR__ . '/../upload';
+                        if (!is_dir($uploadDirectory) && !mkdir($uploadDirectory, 0755, true)) {
+                            $uploadError = "The upload folder could not be created.";
                         } else {
-                            $image_url = 'upload/' . $fileName;
+                            $fileName = bin2hex(random_bytes(16)) . '.' . $extension;
+                            $uploadedFilePath = $uploadDirectory . DIRECTORY_SEPARATOR . $fileName;
+
+                            if (!move_uploaded_file($file['tmp_name'], $uploadedFilePath)) {
+                                $uploadedFilePath = null;
+                                $uploadError = "The uploaded image could not be saved. Please try again.";
+                            } else {
+                                $image_url = 'upload/' . $fileName;
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    if ($uploadError === '' && ($name === '' || !is_numeric($priceInput) || (float) $priceInput < 0)) {
-        $uploadError = "Enter a product name and a valid non-negative price.";
-    }
-
-    if ($uploadError !== '') {
-        $message = $uploadError;
-        $messageType = 'error';
-        if ($uploadedFilePath !== null && file_exists($uploadedFilePath)) {
-            unlink($uploadedFilePath);
-        }
-    } else {
-        $price = (float) $priceInput;
-        if ($product_id > 0) {
-            $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=?, image_url=? WHERE id=?");
-            $stmt->bind_param("sdssi", $name, $price, $description, $image_url, $product_id);
-            $successMessage = "Product updated successfully!";
-            $errorMessage = "Error updating product: ";
-        } else {
-            $stmt = $conn->prepare("INSERT INTO products (name, price, description, image_url) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("sdss", $name, $price, $description, $image_url);
-            $successMessage = "Product added successfully!";
-            $errorMessage = "Error adding product: ";
+        if ($uploadError === '' && ($name === '' || !is_numeric($priceInput) || (float) $priceInput < 0)) {
+            $uploadError = "Enter a product name and a valid non-negative price.";
         }
 
-        if ($stmt->execute()) {
-            $message = $successMessage;
-        } else {
-            $message = $errorMessage . $stmt->error;
+        if ($uploadError !== '') {
+            $message = $uploadError;
             $messageType = 'error';
             if ($uploadedFilePath !== null && file_exists($uploadedFilePath)) {
                 unlink($uploadedFilePath);
+                $uploadedFilePath = null;
             }
+        } else {
+            $price = (float) $priceInput;
+            if ($product_id > 0) {
+                $stmt = $conn->prepare("UPDATE products SET name=?, price=?, description=?, image_url=? WHERE id=?");
+                $stmt->bind_param("sdssi", $name, $price, $description, $image_url, $product_id);
+                $successMessage = "Product updated successfully!";
+            } else {
+                $stmt = $conn->prepare("INSERT INTO products (name, price, description, image_url) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("sdss", $name, $price, $description, $image_url);
+                $successMessage = "Product added successfully!";
+            }
+
+            if ($stmt->execute()) {
+                $message = $successMessage;
+            } else {
+                $message = "The product could not be saved. Please try again later.";
+                $messageType = 'error';
+                if ($uploadedFilePath !== null && file_exists($uploadedFilePath)) {
+                    unlink($uploadedFilePath);
+                    $uploadedFilePath = null;
+                }
+            }
+            $stmt->close();
+        }
+    }
+
+    // delete product
+    if (isset($_GET['delete'])) {
+        $id = (int) $_GET['delete'];
+        $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if ($stmt->execute()) {
+            $message = "Product deleted successfully.";
+        } else {
+            $message = "The product could not be deleted. Please try again later.";
         }
         $stmt->close();
+        // clean the URL after deletion
+        header("Location: admin.php?msg=" . urlencode($message));
+        exit();
     }
-}
 
-// delete product
-if (isset($_GET['delete'])) {
-    $id = (int) $_GET['delete'];
-    $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    if ($stmt->execute()) {
-        $message = "Product deleted successfully.";
-    } else {
-        $message = "Error deleting product: " . $stmt->error;
+    // fetch all products
+    $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $products[] = $row;
+        }
     }
-    $stmt->close();
-    // clean the URL after deletion
-    header("Location: admin.php?msg=" . urlencode($message));
-    exit();
-}
 
-// fetch all products
-$products = [];
-$result = $conn->query("SELECT * FROM products ORDER BY id DESC");
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
+    // fetch single product for editing
+    if (isset($_GET['edit'])) {
+        $id = (int) $_GET['edit'];
+        $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $edit_product = $result->fetch_assoc();
+        $stmt->close();
     }
-}
 
-// fetch single product for editing
-$edit_product = null;
-if (isset($_GET['edit'])) {
-    $id = (int) $_GET['edit'];
-    $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $edit_product = $result->fetch_assoc();
-    $stmt->close();
-}
-
-// handle message display
-if (isset($_GET['msg'])) {
-    $message = htmlspecialchars($_GET['msg']);
+    // handle message display
+    if (isset($_GET['msg'])) {
+        $message = htmlspecialchars($_GET['msg']);
+    }
+} catch (Throwable $exception) {
+    error_log("Product management operation failed: " . $exception->getMessage());
+    if ($uploadedFilePath !== null && file_exists($uploadedFilePath)) {
+        unlink($uploadedFilePath);
+    }
+    $message = 'Product management is temporarily unavailable. Please try again later.';
+    $messageType = 'error';
+    $products = [];
+    $edit_product = null;
 }
 ?>
 
@@ -376,7 +385,7 @@ if (isset($_GET['msg'])) {
             }
         }
     </script>
-    <?php $conn->close(); ?>
+    <?php if ($conn instanceof mysqli): $conn->close(); endif; ?>
 </body>
 
 </html>
